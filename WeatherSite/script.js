@@ -1,16 +1,20 @@
 // Code by Michael White, 2023
-
-function displayWeather(city, temp, maindescrip, description) {
+function displayWeather(city, country, temp, maindescrip, description, feelslike, windspeed) {
     const weatherInfo = document.getElementById('weatherInfo');
-    weatherInfo.innerHTML = "<h2>Weather in " + city + "</h2>"+
+    weatherInfo.innerHTML = "<h2>Weather in " + city + ", " + country + "</h2>"+
     "<p>Temperature: " + temp + "&degF</p>"+
     "<p>Weather: " + maindescrip + "</p>"+
-    "<p>Description: " + description + "</p>";
+    "<p>Description: " + description + "</p>"+
+    "<p>Feels Like: " + feelslike + "&degF</p>"+
+    "<p>Wind Speed: " + windspeed + "mph</p>"
     // TODO: Add checks to change images based on weather
     if(maindescrip == "Clouds") {
-        weatherInfo.innerHTML += "<img src=\"images/rain.png\" class=\"small\" alt=\"rain\"/>";
+        weatherInfo.innerHTML += "<img src=\"images/cloud.png\" class=\"small\" alt=\"cloud\"/>";
     }
-    else {
+    else if(maindescrip == "Rain") {
+        weatherInfo.innerHTML += "<img src =\"images/rain.png\" class=\"small\" alt=\"rain\"/>";
+    }
+    else if(maindescrip == "Sun") {
         weatherInfo.innerHTML += "<img src=\"images/sun.png\" class=\"small\" alt=\"sun\"/>";
     }
 }
@@ -21,7 +25,7 @@ function getWeatherByCoords(latitude, longitude) {
     fetch(url)
         .then((response) => response.json())
         .then(data => {
-            displayWeather(data.name, data.main.temp, data.weather[0].main, data.weather[0].description);
+            displayWeather(data.name, data.sys.country, data.main.temp, data.weather[0].main, data.weather[0].description, data.main.feels_like, data.wind.speed);
         })
         .catch(error => {
             console.error('Error fetching weather data:', error);
